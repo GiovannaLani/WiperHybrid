@@ -20,43 +20,44 @@ public class WiperSensor : MonoBehaviour
 
     private bool isBroken = false;
     private bool isActive = false; 
-    private void Start()
+    private void Awake()
     {
         sensorRenderer = GetComponent<Renderer>();
+        Debug.Log(sensorRenderer);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Limpiaparabrisa"))
-        {
-            SetSensor(true);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Limpiaparabrisa"))
+    //    {
+    //        SetSensor(true);
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Limpiaparabrisa"))
-        {
-            SetSensor(false);
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Limpiaparabrisa"))
+    //    {
+    //        SetSensor(false);
+    //    }
+    //}
 
-    private void SetSensor(bool isOn)
+    public void SetSensor(bool isOn)
     {
         isActive = isOn;
         if (isOn || isBroken)
         {
             sensorText.text = "1";
             sensorRenderer.material = onMaterial;
-            if (wiperManager !=null) wiperManager.SensorChanged(sensorType, true);
-            if (wiperManager2bit != null) wiperManager2bit.SensorChanged(sensorType, true);
+            //if (wiperManager !=null) wiperManager.SensorChanged(sensorType, true);
+            //if (wiperManager2bit != null) wiperManager2bit.SensorChanged(sensorType, true);
         }
         else
         {
             sensorText.text = "0";
             sensorRenderer.material = offMaterial;
-            if (wiperManager != null) wiperManager.SensorChanged(sensorType, false);
-            if (wiperManager2bit != null) wiperManager2bit.SensorChanged(sensorType, false);
+            //if (wiperManager != null) wiperManager.SensorChanged(sensorType, false);
+            //if (wiperManager2bit != null) wiperManager2bit.SensorChanged(sensorType, false);
         }
     }
 

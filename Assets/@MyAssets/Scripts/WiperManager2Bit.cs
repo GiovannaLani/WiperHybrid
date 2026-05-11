@@ -38,21 +38,21 @@ public class WiperManager2Bit : MonoBehaviour
 
     private void ChangeWiperState()
     {
-        if(motor1 == 0 && motor2 == 0)
-        {
-            wiper.Stop();
-        }else if(motor1 == 1 && motor2 == 0)
-        {
-            wiper.MoveRigth();
-        }
-        else if (motor1 == 0 && motor2 == 1)
-        {
-            wiper.MoveLeft();
-        }
-        else if (motor1 == 1 && motor2 == 1)
-        {
-            wiper.Wrong();
-        }
+        //if(motor1 == 0 && motor2 == 0)
+        //{
+        //    wiper.Stop();
+        //}else if(motor1 == 1 && motor2 == 0)
+        //{
+        //    wiper.MoveRigth();
+        //}
+        //else if (motor1 == 0 && motor2 == 1)
+        //{
+        //    wiper.MoveLeft();
+        //}
+        //else if (motor1 == 1 && motor2 == 1)
+        //{
+        //    wiper.Wrong();
+        //}
     }
 
     private void SetMotorText()

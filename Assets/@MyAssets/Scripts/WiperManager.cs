@@ -12,38 +12,38 @@ public class WiperManager : MonoBehaviour
 
     private int m, p = 0;
 
-    private int sensorLeft = 0;
-    private int sensorRight = 0;
+    public WiperSensor sensorLeft;
+    public WiperSensor sensorRight;
 
     private int isRaining = 0;
 
     public TMP_Text motorText;
 
     public Wiper wiper;
+
+    public int error = 0;
+
     private void Start()
     {
         instance = this;
+        sensorLeft.SetSensor(true);
     }
+
     public void UpdateWiper(string message)
     {
         string[] values = message.Split('&');
 
         motor1 = int.Parse(values[0]);
+        float angle = float.Parse(values[1]);
+        int leftSensor = int.Parse(values[2]);
+        int rightSensor = int.Parse(values[3]);
+
 
         SetMotorText();
-        ChangeWiperState();
-    }
+        sensorLeft.SetSensor(leftSensor == 1);
+        sensorRight.SetSensor(rightSensor == 1);
 
-    private void ChangeWiperState()
-    {
-        if (motor1 == 1)
-        {
-            wiper.Move();
-        }
-        else
-        {
-            wiper.Stop();
-        }
+        wiper.SetAngle(angle, motor1==1);
     }
 
     private void SetMotorText()
@@ -56,17 +56,6 @@ public class WiperManager : MonoBehaviour
         SetIsRaining(isRaining ? 1 : 0);
     }
 
-    public void SensorChanged(WiperSensorType type, bool isActive)
-    {
-        if(type == WiperSensorType.LEFT)
-        {
-            SetSensorLeft(isActive ? 1 : 0);
-        }
-        else
-        {
-            SetSensorRight(isActive ? 1 : 0);
-        }
-    }
     void UpdateValue(ref int variable, int newValue)
     {
         if (variable != newValue)
@@ -77,8 +66,7 @@ public class WiperManager : MonoBehaviour
     }
 
     public void SetIsRaining(int value) => UpdateValue(ref isRaining, value);
-    public void SetSensorLeft(int value) => UpdateValue(ref sensorLeft, value);
-    public void SetSensorRight(int value) => UpdateValue(ref sensorRight, value);
+
     public void SetButton(int value, ButtonType type)
     {
         switch (type)
@@ -94,10 +82,20 @@ public class WiperManager : MonoBehaviour
 
     void SendMessage()
     {
-        string message = isRaining+"&"+sensorLeft+"&"+sensorRight+"&"+ m + "&" + p ;
+        string message = isRaining + "&" +  m + "&" + p + "&" + error ;
         Debug.Log("MESSAGE: " + message);
         #if UNITY_WEBGL && !UNITY_EDITOR
                     Application.ExternalCall("handleMessageFromUnity", message);
         #endif
+    }
+
+    public void triggerError()
+    {
+        UpdateValue(ref error, 1);
+    }
+
+    public void resetError()
+    {
+        UpdateValue(ref error, 0);
     }
 }
