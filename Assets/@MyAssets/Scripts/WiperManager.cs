@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -29,15 +30,18 @@ public class WiperManager : MonoBehaviour
         sensorLeft.SetSensor(true);
     }
 
+
     public void UpdateWiper(string message)
     {
         string[] values = message.Split('&');
 
         motor1 = int.Parse(values[0]);
-        float angle = float.Parse(values[1]);
+        float angle = float.Parse(values[1], CultureInfo.InvariantCulture);
         int leftSensor = int.Parse(values[2]);
         int rightSensor = int.Parse(values[3]);
 
+        Debug.Log("UPDATE " + message);
+        Debug.Log("angle " + angle);
 
         SetMotorText();
         sensorLeft.SetSensor(leftSensor == 1);

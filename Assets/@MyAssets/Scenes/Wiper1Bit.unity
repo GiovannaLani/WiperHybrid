@@ -674,7 +674,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193609618}
-  m_LocalRotation: {x: -0.059391193, y: 0.33682406, z: 0.92541665, w: 0.16317599}
+  m_LocalRotation: {x: -0.074026726, y: 0.33391285, z: 0.9174182, w: 0.2033868}
   m_LocalPosition: {x: 0.073, y: 0.49499992, z: 1.213}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -685,7 +685,7 @@ Transform:
   - {fileID: 1618294592}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: -40, y: 0, z: 160}
+  m_LocalEulerAnglesHint: {x: -40, y: 0, z: 155}
 --- !u!114 &193609620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,10 +700,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: -45
   y: 0
-  isBroken: 0
+  minAngle: 5
+  maxAngle: 160
   triangles: {fileID: 1156117074}
   smoke: {fileID: 1627774416}
-  lerpSpeed: 25
+  isBroken: 0
+  lerp1: 0.05
+  lerp2: 0.15
+  lerp3: 0.5
 --- !u!1 &250746761
 GameObject:
   m_ObjectHideFlags: 0
