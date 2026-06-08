@@ -708,6 +708,9 @@ MonoBehaviour:
   lerp1: 0.05
   lerp2: 0.15
   lerp3: 0.5
+  maxSpeedDegPerSec: 35
+  correctionSmoothTime: 0.15
+  speedSmoothFactor: 0.25
 --- !u!1 &250746761
 GameObject:
   m_ObjectHideFlags: 0

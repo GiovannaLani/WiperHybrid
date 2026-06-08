@@ -21,6 +21,7 @@ public class Wiper : MonoBehaviour
 
     private float networkAngle;
 
+    private float targetAngle;
     private float estimatedSpeed;
 
     private float lastPacketTime;
@@ -33,6 +34,11 @@ public class Wiper : MonoBehaviour
     public float lerp2 = 0.15f;
     public float lerp3 = 0.5f;
 
+
+    public float maxDegreesPerSecond = 120f;
+    public float minDeltaForSpeed = 0.05f;
+    public float targetLerpSpeed = 8f;
+
     void Start()
     {
         Instance = this;
@@ -41,6 +47,7 @@ public class Wiper : MonoBehaviour
         previousAngle = currentAngle;
         networkAngle = currentAngle;
 
+        targetAngle = currentAngle;
         numTriangles = triangles.triangleObjects.Length;
 
         ApplyRotation();
@@ -53,12 +60,16 @@ public class Wiper : MonoBehaviour
         float now = Time.time;
         float deltaTime = now - lastPacketTime;
 
-        if (deltaTime > 0.01f)
+        if (deltaTime >= minDeltaForSpeed)
         {
             float instantSpeed = (angle - networkAngle) / deltaTime;
-            estimatedSpeed = Mathf.Lerp(estimatedSpeed, instantSpeed, lerp3);
-            estimatedSpeed = Mathf.Clamp(estimatedSpeed, -40f, 40f);
-            currentAngle = Mathf.Clamp(currentAngle, minAngle, maxAngle);
+
+            float maxPlausibleSpeed = maxDegreesPerSecond * 1.5f;
+            if (Mathf.Abs(instantSpeed) < maxPlausibleSpeed)
+            {
+                estimatedSpeed = Mathf.Lerp(estimatedSpeed, instantSpeed, lerp3);
+                estimatedSpeed = Mathf.Clamp(estimatedSpeed, -maxDegreesPerSecond, maxDegreesPerSecond);
+            }
         }
 
         networkAngle = angle;
@@ -69,6 +80,9 @@ public class Wiper : MonoBehaviour
 
     void Update()
     {
+        targetAngle = Mathf.Lerp(targetAngle, networkAngle, targetLerpSpeed * Time.deltaTime);
+        targetAngle = Mathf.Clamp(targetAngle, minAngle, maxAngle);
+
         UpdateMovement();
         if (isMoving) UpdateTriangles();
         ApplyRotation();
@@ -83,13 +97,18 @@ public class Wiper : MonoBehaviour
                 estimatedSpeed *= -1;
             }
 
-            currentAngle += estimatedSpeed * Time.deltaTime;
+            float speedStep = estimatedSpeed * Time.deltaTime;
+            speedStep = Mathf.Clamp(speedStep, -maxDegreesPerSecond * Time.deltaTime, maxDegreesPerSecond * Time.deltaTime);
 
-            currentAngle = Mathf.Lerp(currentAngle, networkAngle, lerp1);
+            currentAngle += speedStep;
+
+            currentAngle = Mathf.Lerp(currentAngle, targetAngle, lerp1);
+
+            Debug.Log("current angle: " + currentAngle + "  network angle: " + networkAngle + "   speestep: " + speedStep);
         }
         else
         {
-            currentAngle = Mathf.Lerp(currentAngle, networkAngle, lerp2);
+            currentAngle = Mathf.Lerp(currentAngle, targetAngle, lerp2);
         }
 
         currentAngle = Mathf.Clamp(currentAngle, minAngle, maxAngle);

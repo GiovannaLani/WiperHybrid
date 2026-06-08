@@ -40,9 +40,6 @@ public class WiperManager : MonoBehaviour
         int leftSensor = int.Parse(values[2]);
         int rightSensor = int.Parse(values[3]);
 
-        Debug.Log("UPDATE " + message);
-        Debug.Log("angle " + angle);
-
         SetMotorText();
         sensorLeft.SetSensor(leftSensor == 1);
         sensorRight.SetSensor(rightSensor == 1);
